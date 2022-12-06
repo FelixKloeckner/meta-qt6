@@ -39,7 +39,9 @@ create_qt6_sdk_files () {
     echo 'SysrootifyPrefix = true' >> $qtconf
 
     # add qt.conf to both bin and libexec dirs
+    mkdir -p ${SDK_OUTPUT}${SDKPATHNATIVE}${QT6_INSTALL_BINDIR}
     cp ${WORKDIR}/qt.conf ${SDK_OUTPUT}${SDKPATHNATIVE}${QT6_INSTALL_BINDIR}/
+    mkdir -p ${SDK_OUTPUT}${SDKPATHNATIVE}${QT6_INSTALL_HOST_LIBEXECDIR}
     cp ${WORKDIR}/qt.conf ${SDK_OUTPUT}${SDKPATHNATIVE}${QT6_INSTALL_HOST_LIBEXECDIR}/
     cp ${WORKDIR}/qt.conf ${SDK_OUTPUT}${SDKPATHNATIVE}${QT6_INSTALL_BINDIR}/target_qt.conf
 
@@ -58,6 +60,7 @@ create_qt6_sdk_files () {
     echo 'export OE_QMAKE_AR_LTCG="${HOST_PREFIX}gcc-ar"' >> $script
 
     mkspec=${SDK_OUTPUT}${SDKTARGETSYSROOT}${QT6_INSTALL_MKSPECSDIR}/linux-oe-g++/qmake.conf
+    mkdir -p ${SDK_OUTPUT}${SDKTARGETSYSROOT}${QT6_INSTALL_MKSPECSDIR}/linux-oe-g++
     echo "count(QMAKE_AR, 1): QMAKE_AR = ${AR} cqs" >> $mkspec
     echo "count(QMAKE_AR_LTCG, 1): QMAKE_AR_LTCG = ${HOST_PREFIX}gcc-ar cqs" >> $mkspec
     echo "isEmpty(QMAKE_STRIP): QMAKE_STRIP = ${STRIP}" >> $mkspec
@@ -73,6 +76,7 @@ create_qt6_sdk_files () {
         -e 's:${TARGET_PREFIX}:$$[QT_HOST_PREFIX]${bindir}/${TARGET_SYS}/${TARGET_PREFIX}:'
 
     # Generate a toolchain file for using Qt without running setup-environment script
+    mkdir -p ${SDK_OUTPUT}${SDKPATHNATIVE}/usr/share/cmake
     cat > ${SDK_OUTPUT}${SDKPATHNATIVE}/usr/share/cmake/Qt6Toolchain.cmake <<EOF
 cmake_minimum_required(VERSION 3.11)
 include_guard(GLOBAL)
